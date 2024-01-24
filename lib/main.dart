@@ -13,35 +13,65 @@ class MyApp extends StatelessWidget {
   ColorScheme colorScheme =
       ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 59, 96, 179));
 
+  ColorScheme darkColorScheme =
+      ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 59, 96, 179));
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
       theme: ThemeData().copyWith(
-        colorScheme: colorScheme,
+          colorScheme: colorScheme,
+          appBarTheme: AppBarTheme(
+            backgroundColor: colorScheme.primary,
+            foregroundColor: colorScheme.onPrimary,
+          ),
+          cardTheme: const CardTheme().copyWith(
+            color: colorScheme.secondaryContainer,
+            margin: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: colorScheme.primaryContainer,
+            ),
+          ),
+          textTheme: ThemeData().textTheme.copyWith(
+                  titleLarge: TextStyle(
+                color: colorScheme.onSecondaryContainer,
+                fontSize: 17,
+              ))),
+      // TODO: not all darkTheme colors are set check the Colors here!,
+      darkTheme: ThemeData().copyWith(
+        colorScheme: darkColorScheme,
         appBarTheme: AppBarTheme(
-          backgroundColor: colorScheme.primaryContainer,
-          foregroundColor: colorScheme.onPrimaryContainer,
+          backgroundColor: darkColorScheme.primary,
+          foregroundColor: darkColorScheme.onPrimary,
         ),
         cardTheme: const CardTheme().copyWith(
-          color: colorScheme.primaryContainer,
+          color: darkColorScheme.secondaryContainer,
           margin: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 8,
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
-          // set a background color is colorScheme.primaryContainer
           style: ElevatedButton.styleFrom(
-            backgroundColor: colorScheme.primaryContainer,
+            backgroundColor: darkColorScheme.onPrimaryContainer,
+            foregroundColor: darkColorScheme.primaryContainer,
           ),
         ),
         textTheme: ThemeData().textTheme.copyWith(
-          titleLarge: TextStyle(
-            color: colorScheme.onSecondaryContainer,
-            fontSize: 17,
-          )
-        )
+                titleLarge: TextStyle(
+              color: darkColorScheme.onSecondaryContainer,
+              fontSize: 17,
+            )),
+        bottomSheetTheme: const BottomSheetThemeData().copyWith(
+          backgroundColor: darkColorScheme.onPrimaryContainer,
+        ),
       ),
       home: const PageExpenses(),
     );

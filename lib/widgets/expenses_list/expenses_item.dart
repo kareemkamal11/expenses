@@ -8,7 +8,6 @@ class ExpensesItmes extends StatelessWidget {
   });
 
   final Expense expenseIndex;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +16,14 @@ class ExpensesItmes extends StatelessWidget {
         leading: CircleAvatar(
           child: Icon(categoryIcons[expenseIndex.category]),
         ),
-        title: Text(expenseIndex.title),
+        title: Text(
+          expenseIndex.title,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         subtitle: Text(expenseIndex.formattedDate),
         trailing: Text(expenseIndex.amount.toStringAsFixed(2)),
       ),
     );
   }
 }
+

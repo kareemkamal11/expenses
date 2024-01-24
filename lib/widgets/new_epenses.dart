@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:expenses/models/expenses.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -119,47 +121,31 @@ class _NewExpensesState extends State<NewExpenses> {
                 if (titleController.text.trim().isEmpty ||
                     isNotAmount ||
                     selectedDate == null) {
-                  showDialog(
-                      context: context,
-                      builder: (ctx) {
-                        return AlertDialog(
-                          title: const Row(
-                            children: [
-                              Text('Invalid Input'),
-                              Spacer(),
-                              Icon(Icons.error, color: Colors.red),
+                      //TODO: fix this dialog 
+                    showDialog( // show dialog not working here 
+                        context: context,
+                        builder: (ctx) {
+                          return AlertDialog(
+                            title: const Row(
+                              children: [
+                                Text('Invalid Input'),
+                                Spacer(),
+                                Icon(Icons.error, color: Colors.red),
+                              ],
+                            ),
+                            content: const Text(
+                                'make sure you enter a title, amount and date'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(),
+                                  child: const Text('Okay'))
                             ],
-                          ),
-                          content: const Text(
-                              'make sure you enter a title, amount and date'),
-                          actions: [
-                            TextButton(
-                                onPressed: () => Navigator.of(ctx).pop(),
-                                child: const Text('Okay'))
-                          ],
-                        );
-                      });
+                          );
+                        }); // show dialog not working here 
                 } else {
-                  widget.onAddExpense(Expense(
-                    title: titleController.text,
-                    amount: enteredAmount,
-                    date: selectedDate!,
-                    category: selectedCategory,
-                  ));
+                  log('create new expense');
                 }
                 Navigator.of(context).pop();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    // backgroundColor green and text wihte
-                    backgroundColor: Colors.green,
-                    duration: Duration(seconds: 2),
-                    content: Text(
-                      'Expense Added',
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ),
-                );
               },
               child: const Text('Add Expense'),
             ),
