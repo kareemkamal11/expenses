@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:expenses/models/expenses.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewExpenses extends StatefulWidget {
-  const NewExpenses({super.key});
+  const NewExpenses({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpenses> createState() => _NewExpensesState();
@@ -16,8 +16,6 @@ class _NewExpensesState extends State<NewExpenses> {
   final amountController = TextEditingController();
   final formaterr = DateFormat.yMd();
   DateTime? selectedDate;
-
-  String warning = '';
 
   Category selectedCategory = Category.food;
 
@@ -114,23 +112,56 @@ class _NewExpensesState extends State<NewExpenses> {
             ),
             ElevatedButton(
               onPressed: () {
-                log(titleController.text);
-                log(amountController.text);
+                final enteredAmount = double.tryParse(amountController.text);
+                final bool isNotAmount =
+                    enteredAmount == null || enteredAmount <= 0;
 
-                titleController.text.isEmpty ||
-                        amountController.text.isEmpty ||
-                        selectedDate == null
-                    ? setState(() {
-                        warning = 'Please!, enter all Data';
-                      })
-                    : Navigator.of(context).pop();
+                if (titleController.text.trim().isEmpty ||
+                    isNotAmount ||
+                    selectedDate == null) {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return AlertDialog(
+                          title: const Row(
+                            children: [
+                              Text('Invalid Input'),
+                              Spacer(),
+                              Icon(Icons.error, color: Colors.red),
+                            ],
+                          ),
+                          content: const Text(
+                              'make sure you enter a title, amount and date'),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.of(ctx).pop(),
+                                child: const Text('Okay'))
+                          ],
+                        );
+                      });
+                } else {
+                  widget.onAddExpense(Expense(
+                    title: titleController.text,
+                    amount: enteredAmount,
+                    date: selectedDate!,
+                    category: selectedCategory,
+                  ));
+                }
+                Navigator.of(context).pop();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    // backgroundColor green and text wihte
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 2),
+                    content: Text(
+                      'Expense Added',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                );
               },
               child: const Text('Add Expense'),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              warning,
-              style: const TextStyle(color: Colors.red),
             ),
           ],
         ));

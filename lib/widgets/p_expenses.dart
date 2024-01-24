@@ -28,6 +28,19 @@ class _PageExpensesState extends State<PageExpenses> {
         amount: 31.3,
         date: DateTime.now()),
   ];
+
+  void addExpense(Expense expense) {
+    setState(() {
+      expenses.add(expense);
+    });
+  }
+
+  void removeExpense(Expense expense) {
+    setState(() {
+      expenses.remove(expense);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +50,10 @@ class _PageExpensesState extends State<PageExpenses> {
       body: Column(
         children: [
           Expanded(
-            child: ExpensesList(expenses: expenses),
+            child: ExpensesList(
+              expenses: expenses,
+              onRemoveExpense: removeExpense,
+            ),
           ),
         ],
       ),
@@ -45,9 +61,11 @@ class _PageExpensesState extends State<PageExpenses> {
         onPressed: () {
           showModalBottomSheet(
             context: context,
-            builder: (ctx) => const SizedBox(
+            builder: (ctx) => SizedBox(
               height: 500,
-              child: NewExpenses(),
+              child: NewExpenses(
+                onAddExpense: addExpense,
+              ),
             ),
           );
         },

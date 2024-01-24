@@ -8,6 +8,7 @@ class ExpensesItmes extends StatelessWidget {
   });
 
   final Expense expenseIndex;
+  
 
   @override
   Widget build(BuildContext context) {
