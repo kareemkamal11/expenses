@@ -44,12 +44,12 @@ class MyApp extends StatelessWidget {
                 color: colorScheme.onSecondaryContainer,
                 fontSize: 17,
               ))),
-      // TODO: not all darkTheme colors are set check the Colors here!,
       darkTheme: ThemeData().copyWith(
+        scaffoldBackgroundColor: darkColorScheme.onSecondaryContainer,
         colorScheme: darkColorScheme,
         appBarTheme: AppBarTheme(
-          backgroundColor: darkColorScheme.primary,
-          foregroundColor: darkColorScheme.onPrimary,
+          backgroundColor: darkColorScheme.onPrimaryContainer,
+          foregroundColor: darkColorScheme.primaryContainer,
         ),
         cardTheme: const CardTheme().copyWith(
           color: darkColorScheme.secondaryContainer,

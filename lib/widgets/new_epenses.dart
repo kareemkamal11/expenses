@@ -25,6 +25,7 @@ class _NewExpensesState extends State<NewExpenses> {
   void dispose() {
     super.dispose();
     titleController.dispose();
+    amountController.dispose();
   }
 
   @override
@@ -117,12 +118,12 @@ class _NewExpensesState extends State<NewExpenses> {
                 final enteredAmount = double.tryParse(amountController.text);
                 final bool isNotAmount =
                     enteredAmount == null || enteredAmount <= 0;
-
                 if (titleController.text.trim().isEmpty ||
                     isNotAmount ||
                     selectedDate == null) {
-                      //TODO: fix this dialog 
-                    showDialog( // show dialog not working here 
+                  log('it is empty');
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showDialog(
                         context: context,
                         builder: (ctx) {
                           return AlertDialog(
@@ -141,11 +142,20 @@ class _NewExpensesState extends State<NewExpenses> {
                                   child: const Text('Okay'))
                             ],
                           );
-                        }); // show dialog not working here 
+                        });
+                  });
                 } else {
                   log('create new expense');
+                  widget.onAddExpense(
+                    Expense(
+                      title: titleController.text,
+                      amount: enteredAmount,
+                      date: selectedDate!,
+                      category: selectedCategory,
+                    ),
+                  );
+                  Navigator.of(context).pop();
                 }
-                Navigator.of(context).pop();
               },
               child: const Text('Add Expense'),
             ),

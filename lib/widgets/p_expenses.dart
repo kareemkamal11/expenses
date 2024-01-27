@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:expenses/models/expenses.dart';
 import 'package:expenses/widgets/expenses_list/expenses_list.dart';
 import 'package:expenses/widgets/new_epenses.dart';
@@ -46,6 +48,35 @@ class _PageExpensesState extends State<PageExpenses> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expenses'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  // show dialog not working here
+                  context: context,
+                  builder: (ctx) {
+                    log('show dialog');
+                    return AlertDialog(
+                      title: const Row(
+                        children: [
+                          Text('Invalid Input'),
+                          Spacer(),
+                          Icon(Icons.error, color: Colors.red),
+                        ],
+                      ),
+                      content: const Text(
+                          'make sure you enter a title, amount and date'),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            child: const Text('Okay'))
+                      ],
+                    );
+                  }); // show dialog not working here
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: Column(
         children: [
