@@ -1,12 +1,16 @@
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:expenses/models/expenses.dart';
 import 'package:expenses/widgets/expenses_list/expenses_list.dart';
 import 'package:expenses/widgets/new_epenses.dart';
 import 'package:flutter/material.dart';
 
+import 'chart/chart.dart';
+
 class PageExpenses extends StatefulWidget {
-  const PageExpenses({super.key});
+  const PageExpenses({
+    super.key,
+  });
 
   @override
   State<PageExpenses> createState() => _PageExpensesState();
@@ -49,37 +53,18 @@ class _PageExpensesState extends State<PageExpenses> {
       appBar: AppBar(
         title: const Text('Expenses'),
         actions: [
+          // iconButton to change theme mode (light/dark)
           IconButton(
             onPressed: () {
-              showDialog(
-                  // show dialog not working here
-                  context: context,
-                  builder: (ctx) {
-                    log('show dialog');
-                    return AlertDialog(
-                      title: const Row(
-                        children: [
-                          Text('Invalid Input'),
-                          Spacer(),
-                          Icon(Icons.error, color: Colors.red),
-                        ],
-                      ),
-                      content: const Text(
-                          'make sure you enter a title, amount and date'),
-                      actions: [
-                        TextButton(
-                            onPressed: () => Navigator.of(ctx).pop(),
-                            child: const Text('Okay'))
-                      ],
-                    );
-                  }); // show dialog not working here
+              exit(0);
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.exit_to_app, color: Colors.red),
           ),
         ],
       ),
       body: Column(
         children: [
+          Chart(expenses: expenses),
           Expanded(
             child: ExpensesList(
               expenses: expenses,

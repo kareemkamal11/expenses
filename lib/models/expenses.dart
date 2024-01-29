@@ -11,10 +11,9 @@ const categoryIcons = {
   Category.travel: Icons.flight,
   Category.leisure: Icons.movie,
   Category.work: Icons.work,
-  Category.other: Icons.attach_money,
 };
 
-enum Category { food, travel, leisure, work, other }
+enum Category { food, travel, leisure, work }
 
 class Expense {
   final String id;
@@ -22,8 +21,6 @@ class Expense {
   final double amount;
   final DateTime date;
   final Category category;
-
-  
 
   String get formattedDate => dateFormat.format(date);
 
@@ -33,5 +30,26 @@ class Expense {
     required this.amount,
     required this.date,
   }) : id = uuid.v4();
+}
 
+class ExpensesBucket {
+  final Category category;
+  final List<Expense> expenses;
+
+  double get totalExpenses {
+    double total = 0;
+    for (var expense in expenses) {
+      total += expense.amount;
+    }
+    return total;
+  }
+
+  ExpensesBucket({
+    required this.category,
+    required this.expenses,
+  });
+  ExpensesBucket.forCategory(List<Expense> allExpenses, this.category)
+      : expenses = allExpenses
+            .where((element) => element.category == category)
+            .toList();
 }

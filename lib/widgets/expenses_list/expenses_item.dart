@@ -21,9 +21,8 @@ class ExpensesItmes extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         subtitle: Text(expenseIndex.formattedDate),
-        trailing: Text(expenseIndex.amount.toStringAsFixed(2)),
+        trailing: Text('${expenseIndex.amount.toStringAsFixed(2)} \$'),
       ),
     );
   }
 }
-
