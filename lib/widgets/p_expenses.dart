@@ -49,6 +49,7 @@ class _PageExpensesState extends State<PageExpenses> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expenses'),
@@ -62,26 +63,41 @@ class _PageExpensesState extends State<PageExpenses> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(expenses: expenses),
-          Expanded(
-            child: ExpensesList(
-              expenses: expenses,
-              onRemoveExpense: removeExpense,
+      body: width < 600
+          ? Column(
+              children: [
+                Expanded(
+                  child: Chart(expenses: expenses),
+                ),
+                Expanded(
+                  child: ExpensesList(
+                    expenses: expenses,
+                    onRemoveExpense: removeExpense,
+                  ),
+                ),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                  child: Chart(expenses: expenses),
+                ),
+                Expanded(
+                  child: ExpensesList(
+                    expenses: expenses,
+                    onRemoveExpense: removeExpense,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
+            useSafeArea: true,
+            isScrollControlled: true,
             context: context,
-            builder: (ctx) => SizedBox(
-              height: 500,
-              child: NewExpenses(
-                onAddExpense: addExpense,
-              ),
+            builder: (ctx) => NewExpenses(
+              onAddExpense: addExpense,
             ),
           );
         },

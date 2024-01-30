@@ -30,136 +30,142 @@ class _NewExpensesState extends State<NewExpenses> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
+    return SizedBox(
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
-                const Text('Add New Expense',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.purple,
-                    )),
-                const Spacer(),
-                TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'))
-              ],
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              maxLength: 50,
-              controller: titleController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(labelText: 'Title'),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Amount',
-                      prefixText: '\$',
-                    ),
-                  ),
+                Row(
+                  children: [
+                    const Text('Add New Expense',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.purple,
+                        )),
+                    const Spacer(),
+                    TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cancel'))
+                  ],
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  // create a date picker here with a textButtonicon
-                  child: TextButton.icon(
-                    onPressed: () async {
-                      final timeNow = DateTime.now();
-                      final firstDate = DateTime(
-                          timeNow.year, timeNow.month - 1, timeNow.day);
-                      final pickerdDate = await showDatePicker(
-                        context: context,
-                        initialDate: timeNow,
-                        firstDate: firstDate,
-                        lastDate: timeNow,
-                      );
-                      setState(() {
-                        selectedDate = pickerdDate;
-                      });
-                    },
-                    icon: const Icon(Icons.calendar_today),
-                    label: Text(selectedDate == null
-                        ? 'Choose Date'
-                        : formaterr.format(selectedDate!)),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10),
-            DropdownButton(
-              value: selectedCategory,
-              items: [
-                ...Category.values.map((e) {
-                  return DropdownMenuItem(
-                    value: e,
-                    child: Text(e.name),
-                  );
-                }).toList()
-              ],
-              onChanged: (newVal) {
-                setState(() {
-                  if (newVal == null) {
-                    return;
-                  }
-                  selectedCategory = newVal;
-                });
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final enteredAmount = double.tryParse(amountController.text);
-                final bool isNotAmount =
-                    enteredAmount == null || enteredAmount <= 0;
-                if (titleController.text.trim().isEmpty ||
-                    isNotAmount ||
-                    selectedDate == null) {
-                  log('it is empty');
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    showDialog(
-                        context: context,
-                        builder: (ctx) {
-                          return AlertDialog(
-                            title: const Row(
-                              children: [
-                                Text('Invalid Input'),
-                                Spacer(),
-                                Icon(Icons.error, color: Colors.red),
-                              ],
-                            ),
-                            content: const Text(
-                                'make sure you enter a title, amount and date'),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.of(ctx).pop(),
-                                  child: const Text('Okay'))
-                            ],
-                          );
-                        });
-                  });
-                } else {
-                  log('create new expense');
-                  widget.onAddExpense(
-                    Expense(
-                      title: titleController.text,
-                      amount: enteredAmount,
-                      date: selectedDate!,
-                      category: selectedCategory,
+                const SizedBox(height: 20),
+                TextField(
+                  maxLength: 50,
+                  controller: titleController,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(labelText: 'Title'),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Amount',
+                          prefixText: '\$',
+                        ),
+                      ),
                     ),
-                  );
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('Add Expense'),
-            ),
-          ],
-        ));
+                    const SizedBox(width: 20),
+                    Expanded(
+                      // create a date picker here with a textButtonicon
+                      child: TextButton.icon(
+                        onPressed: () async {
+                          final timeNow = DateTime.now();
+                          final firstDate = DateTime(
+                              timeNow.year, timeNow.month - 1, timeNow.day);
+                          final pickerdDate = await showDatePicker(
+                            context: context,
+                            initialDate: timeNow,
+                            firstDate: firstDate,
+                            lastDate: timeNow,
+                          );
+                          setState(() {
+                            selectedDate = pickerdDate;
+                          });
+                        },
+                        icon: const Icon(Icons.calendar_today),
+                        label: Text(selectedDate == null
+                            ? 'Choose Date'
+                            : formaterr.format(selectedDate!)),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 10),
+                DropdownButton(
+                  value: selectedCategory,
+                  items: [
+                    ...Category.values.map((e) {
+                      return DropdownMenuItem(
+                        value: e,
+                        child: Text(e.name),
+                      );
+                    }).toList()
+                  ],
+                  onChanged: (newVal) {
+                    setState(() {
+                      if (newVal == null) {
+                        return;
+                      }
+                      selectedCategory = newVal;
+                    });
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final enteredAmount =
+                        double.tryParse(amountController.text);
+                    final bool isNotAmount =
+                        enteredAmount == null || enteredAmount <= 0;
+                    if (titleController.text.trim().isEmpty ||
+                        isNotAmount ||
+                        selectedDate == null) {
+                      log('it is empty');
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        showDialog(
+                            context: context,
+                            builder: (ctx) {
+                              return AlertDialog.adaptive(
+                                title: const Row(
+                                  children: [
+                                    Text('Invalid Input'),
+                                    Spacer(),
+                                    Icon(Icons.error, color: Colors.red),
+                                  ],
+                                ),
+                                content: const Text(
+                                    'make sure you enter a title, amount and date'),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () => Navigator.of(ctx).pop(),
+                                      child: const Text('Okay'))
+                                ],
+                              );
+                            });
+                      });
+                    } else {
+                      log('create new expense');
+                      widget.onAddExpense(
+                        Expense(
+                          title: titleController.text,
+                          amount: enteredAmount,
+                          date: selectedDate!,
+                          category: selectedCategory,
+                        ),
+                      );
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Text('Add Expense'),
+                ),
+              ],
+            )),
+      ),
+    );
   }
 }

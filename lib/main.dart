@@ -2,9 +2,15 @@
 
 import 'package:expenses/widgets/p_expenses.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(MyApp());
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]).then((_) {
+    runApp(MyApp());
+  // });
 }
 
 class MyApp extends StatelessWidget {
@@ -73,7 +79,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: darkColorScheme.onPrimaryContainer,
         ),
       ),
-      home:  const PageExpenses(),
+      home: const PageExpenses(),
     );
   }
 }

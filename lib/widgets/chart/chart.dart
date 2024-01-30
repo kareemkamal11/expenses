@@ -30,58 +30,62 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      width: double.infinity,
-      height: 175,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary.withOpacity(0.3),
-            Theme.of(context).colorScheme.primary.withOpacity(0.0),
-          ],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        ),
-      ),
-      child: Column(children: [
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              for (final ele in buckets)
-                ChartBar(
-                    fill: ele.totalExpenses == 0
-                        ? 0
-                        : ele.totalExpenses / maxTotalExpenses),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        width: double.infinity,
+        height: constraints.maxHeight,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.3),
+              Theme.of(context).colorScheme.primary.withOpacity(0.0),
             ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
           ),
         ),
-        const SizedBox(height: 8),
-        Expanded(
-          child: Row(
-            children: buckets
-                .map((bucket) => Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Icon(
-                          categoryIcons[bucket.category],
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.dark
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.7),
-                        ),
-                      ),
-                    ))
-                .toList(),
+        child: Column(children: [
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (final ele in buckets)
+                  ChartBar(
+                      fill: ele.totalExpenses == 0
+                          ? 0
+                          : ele.totalExpenses / maxTotalExpenses),
+              ],
+            ),
           ),
-        ),
-      ]),
-    );
+          constraints.minHeight < 200 ? Container() : const SizedBox(height: 8),
+          constraints.minHeight < 200
+              ? Container()
+              : Row(
+                children: buckets
+                    .map((bucket) => Expanded(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4),
+                            child: Icon(
+                              categoryIcons[bucket.category],
+                              color: MediaQuery.of(context)
+                                          .platformBrightness ==
+                                      Brightness.dark
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.7),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              )
+        ]),
+      );
+    });
   }
 }
